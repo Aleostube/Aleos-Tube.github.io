@@ -1,3 +1,14 @@
+# Aleo’s Tube Store – Futuristic Adaptive Blog
+
+Sistem blog futuristik dengan:
+- Auto Adaptive Layout
+- Auto Translate (15 bahasa + Tetun Timor Leste)
+- AI-like Web Worker Summarizer
+- Grid responsif
+- Support konten biasa, affiliasi, & cerita dewasa
+
+Powered by Aleo + Futuristic Engine 🚀
+
 # 🔥 Aleo’s Tube Network  
 ### Backlink + Affiliate Tracker v1.0  
 _Integrating Blog, YouTube & Affiliate SEO Growth_
