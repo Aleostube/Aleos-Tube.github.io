@@ -1,3 +1,400 @@
+# Aleos-Tube.github.io — Struktur Repo Lengkap (Rapi & Futuristik)
+
+Dokumen ini berisi struktur folder dan isi file yang siap kamu copy-paste ke repo **Aleos-Tube.github.io**. Saya susun agar modern (Vite + React), tailwind-ready, dan mudah deploy ke GitHub Pages. Kamu akan menemukan file kunci berikut: konfigurasi, komponen, layout futuristik, contoh halaman, stylesheet, workflow GitHub Actions, dan README.
+
+---
+
+## Struktur direktori (ringkasan)
+
+```
+Aleos-Tube.github.io/
+├─ .github/
+│  └─ workflows/
+│     └─ deploy.yml
+├─ public/
+│  ├─ favicon.ico
+│  └─ assets/
+│     └─ placeholder.jpg
+├─ src/
+│  ├─ components/
+│  │  ├─ AnimatedPostCard.jsx
+│  │  ├─ TranslateButton.jsx
+│  │  ├─ Analyser.jsx
+│  │  └─ NavBar.jsx
+│  ├─ layouts/
+│  │  └─ FuturisticBlogLayout.jsx
+│  ├─ pages/
+│  │  ├─ Home.jsx
+│  │  └─ Post.jsx
+│  ├─ App.jsx
+│  ├─ main.jsx
+│  └─ index.css
+├─ .gitignore
+├─ README.md
+├─ package.json
+├─ tailwind.config.cjs
+├─ postcss.config.cjs
+└─ vite.config.js
+```
+
+---
+
+## File kunci — isi (salin ke file masing-masing)
+
+> Catatan: jangan jalankan paste seluruh folder ke repo tanpa membaca komentar kecil di tiap file.
+
+---
+
+### 1) `package.json`
+
+```json
+{
+  "name": "aleos-tube",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "deploy": "gh-pages -d dist"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0",
+    "tailwindcss": "^3.4.0",
+    "postcss": "^8.4.0",
+    "autoprefixer": "^10.4.0",
+    "gh-pages": "^5.0.0"
+  }
+}
+```
+
+---
+
+### 2) `vite.config.js`
+
+```js
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+export default defineConfig({
+  plugins: [react()],
+  base: process.env.GITHUB_PAGES ? '/Aleos-Tube.github.io/' : '/'
+})
+```
+
+---
+
+### 3) `tailwind.config.cjs`
+
+```js
+module.exports = {
+  content: ["./index.html","./src/**/*.{js,jsx,ts,tsx}"],
+  theme: {
+    extend: {
+      colors: {
+        neon: '#7cf9ff',
+        night: '#0b1020',
+        chrome: '#c7d2fe'
+      }
+    }
+  },
+  plugins: []
+}
+```
+
+---
+
+### 4) `postcss.config.cjs`
+
+```js
+module.exports = {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {}
+  }
+}
+```
+
+---
+
+### 5) `.github/workflows/deploy.yml`
+
+```yaml
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm ci
+      - run: npm run build
+      - run: npx gh-pages -d dist
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+```
+
+---
+
+### 6) `public/assets/placeholder.jpg`
+
+> Letakkan file gambar placeholder (atau gunakan image dari Unsplash) dengan nama `placeholder.jpg`.
+
+---
+
+### 7) `index.html` (root — Vite template)
+
+```html
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Toko Tabung Aleo – Blog Futuristik</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
+```
+
+---
+
+### 8) `src/main.jsx`
+
+```jsx
+import React from 'react'
+import { createRoot } from 'react-dom/client'
+import App from './App'
+import './index.css'
+
+createRoot(document.getElementById('root')).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+)
+```
+
+---
+
+### 9) `src/index.css`
+
+```css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body, #root { height: 100%; }
+body { @apply bg-night text-chrome; }
+```
+
+---
+
+### 10) `src/App.jsx`
+
+```jsx
+import React from 'react'
+import FuturisticBlogLayout from './layouts/FuturisticBlogLayout'
+import Home from './pages/Home'
+
+export default function App(){
+  return (
+    <FuturisticBlogLayout>
+      <Home />
+    </FuturisticBlogLayout>
+  )
+}
+```
+
+---
+
+### 11) `src/layouts/FuturisticBlogLayout.jsx`
+
+```jsx
+import React from 'react'
+import NavBar from '../components/NavBar'
+
+export default function FuturisticBlogLayout({children}){
+  return (
+    <div className="min-h-screen p-6 bg-gradient-to-b from-black via-[#071129] to-[#071a2b]">
+      <NavBar />
+      <main className="max-w-5xl mx-auto mt-8">{children}</main>
+      <footer className="mt-12 text-center text-sm opacity-70">© Aleo — Toko Tabung Aleo</footer>
+    </div>
+  )
+}
+```
+
+---
+
+### 12) `src/components/NavBar.jsx`
+
+```jsx
+import React from 'react'
+
+export default function NavBar(){
+  return (
+    <nav className="flex items-center justify-between max-w-5xl mx-auto">
+      <h1 className="text-2xl font-bold text-neon">Aleo's Tube</h1>
+      <div className="space-x-4">
+        <a href="#" className="text-sm">Home</a>
+        <a href="#" className="text-sm">About</a>
+        <a href="#" className="text-sm">Contact</a>
+      </div>
+    </nav>
+  )
+}
+```
+
+---
+
+### 13) `src/components/AnimatedPostCard.jsx`
+
+```jsx
+import React from 'react'
+
+export default function AnimatedPostCard({title, excerpt, img}){
+  return (
+    <article className="group relative overflow-hidden rounded-2xl shadow-2xl p-4 bg-gradient-to-r from-[#001022] via-[#04162b] to-[#071a2b] hover:scale-101 transition-transform">
+      <img src={img || '/public/assets/placeholder.jpg'} alt="cover" className="w-full h-48 object-cover rounded-lg" />
+      <h3 className="mt-4 text-xl font-semibold text-neon">{title}</h3>
+      <p className="mt-2 text-sm opacity-80">{excerpt}</p>
+    </article>
+  )
+}
+```
+
+---
+
+### 14) `src/components/TranslateButton.jsx`
+
+```jsx
+import React from 'react'
+
+export default function TranslateButton({onTranslate}){
+  return (
+    <button onClick={onTranslate} className="px-3 py-1 rounded-md border border-neon text-sm">
+      Translate
+    </button>
+  )
+}
+```
+
+---
+
+### 15) `src/components/Analyser.jsx`
+
+```jsx
+import React from 'react'
+
+export default function Analyser({text}){
+  return (
+    <div className="p-4 rounded-lg border mt-4">
+      <strong>Analisis singkat</strong>
+      <p className="mt-2 text-sm opacity-80">Kata: {text ? text.split(' ').length : 0}</p>
+    </div>
+  )
+}
+```
+
+---
+
+### 16) `src/pages/Home.jsx`
+
+```jsx
+import React from 'react'
+import AnimatedPostCard from '../components/AnimatedPostCard'
+
+export default function Home(){
+  const posts = [
+    {title: 'Mimpi Tabung Futuristik', excerpt: 'Sketch ide tentang masa depan material tabung.', img: '/assets/placeholder.jpg'},
+    {title: 'Kreasi Aleo', excerpt: 'Catatan harian kreator serabutan.'}
+  ]
+
+  return (
+    <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {posts.map((p,i)=> <AnimatedPostCard key={i} {...p} />)}
+    </section>
+  )
+}
+```
+
+---
+
+### 17) `README.md`
+
+````md
+# Toko Tabung Aleo — Blog Adaptif Futuristik
+
+Repo ini adalah basis Vite + React + Tailwind untuk blog Aleo. Build dengan perintah:
+
+```bash
+npm install
+npm run dev
+````
+
+Untuk deploy ke GitHub Pages:
+
+```bash
+npm run build
+npm run deploy
+```
+
+Sesuaikan `base` pada `vite.config.js` jika nama repo berbeda.
+
+```
+
+---
+
+### 18) `.gitignore`
+```
+
+node_modules
+dist
+.env
+
+```
+
+---
+
+## Langkah cepat setelah paste:
+1. `npm install`
+2. `npm run dev` — buka localhost
+3. Buat branch `main` lalu push ke GitHub
+4. Action `Deploy to GitHub Pages` akan otomatis berjalan bila sudah ada `main`
+
+---
+
+## Inovasi & ide tambahan (opsional)
+- Tambahkan CMS ringan (contentful/markdown) untuk menambah posting tanpa rebuild.
+- Integrasi search client-side (lunr.js) untuk pengalaman pembaca.
+- Scripting untuk generate OG images otomatis.
+
+---
+
+Kalau kamu mau, aku bisa:  
+- Generate file ZIP dari struktur ini (siap download), atau  
+- Buat commit siap-push (isi .patch) yang bisa kamu apply di repo, atau  
+- Langsung tulis setiap file ke branch `main` (jika kamu beri akses token) — pilih salah satu.
+
+
+
+```
+
 # Aleo’s Tube Store – Futuristic Adaptive Blog
 
 Sistem blog futuristik dengan:
